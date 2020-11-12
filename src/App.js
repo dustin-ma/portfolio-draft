@@ -28,7 +28,7 @@ const Lights = ( ) => {
   );
 }
 
-const HTMLContent = ({ bgColor, domContent, children, modelPath, positionY }) => { // wrapper for the html contents
+const HTMLContent = ({ bgColor, domContent, children, modelPath, positionX, positionY, positionZ }) => { // wrapper for the html contents
 
   const ref = useRef();
   useFrame(() => (ref.current.rotation.y += 0.001));
@@ -38,12 +38,12 @@ const HTMLContent = ({ bgColor, domContent, children, modelPath, positionY }) =>
 
   useEffect(() => {
     inView && (document.body.style.background = bgColor)
-  }, [inView])
+  }, [inView, bgColor])
 
   return (
     <Section factor={1.5} offset={1}>
-      <group position={[0, positionY, 0]}>
-        <mesh ref={ref} position={[0, -35, 0]}>
+      <group position={[positionX, positionY, positionZ]}>
+        <mesh ref={ref} position={[0, 0, 0]}>
           <Model modelPath={modelPath}/>
         </mesh>
         <Html portal={domContent} fullscreen>
@@ -66,15 +66,15 @@ export default function App() {
         <Lights/>
         <Suspense fallback={null}>
 
-          <HTMLContent domContent={domContent} modelPath="/armchairYellow.gltf" positionY={250} bgColor={'#f0c871'}> 
+          <HTMLContent domContent={domContent} modelPath="/mp5.gltf" positionX={0} positionY={250} positionZ={100} bgColor={'#f0c871'}> 
               <h1 className='title'>Very Nice!</h1>
           </HTMLContent> 
 
-          <HTMLContent domContent={domContent} modelPath="/armchairGreen.gltf" positionY={0} bgColor={'#61a323'}> 
+          <HTMLContent domContent={domContent} modelPath="/armchairGray.gltf" positionX={0} positionY={0} positionZ={0} bgColor={'#61a323'}> 
               <h1 className='title'>Great Succuess!</h1>
           </HTMLContent>  
 
-          <HTMLContent domContent={domContent} modelPath="/armchairGray.gltf" positionY={-250} bgColor={'#2d312b'}> 
+          <HTMLContent domContent={domContent} modelPath="/armchairYellow.gltf" positionX={0} positionY={-250} positionZ={0} bgColor={'#2d312b'}> 
               <h1 className='title'>Goodbye!</h1>
           </HTMLContent> 
 
