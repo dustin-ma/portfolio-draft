@@ -4,11 +4,12 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Quicksand",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #f0c871;
+  background: #ead2ac; 
+  //background: #76b937; 
   transition: 0.4s ease-in-out;
 }
 
@@ -22,13 +23,17 @@ body,
   overflow: hidden;
 }
 
+#cursor {
+  font-size: 30px;
+}
+
 .scrollArea {
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  overflow: auto;
+  overflow-x: hidden;
 }
 
 .container {
@@ -84,8 +89,9 @@ header {
 }
 
 .title {
-  font-size: 10rem;
-  text-align: center;
+  transform: translate(365px, -82px);
+  font-size: 3rem;
+  text-align: left;
   width: 100%;
   margin: 0 auto;
   color: #fff;
@@ -94,6 +100,37 @@ header {
   }
   @media (max-width: 1440px) {
     font-size: 6rem;
+  }
+}
+
+.text {
+  transform: translate(365px, -140px);
+  font-size: 1.5rem;
+  text-align: left;
+  width: 100%;
+  margin: 1%;
+  color: #fff;
+  span {
+    display: block;
+  }
+  @media (max-width: 1440px) {
+    font-size: 2rem;
+  }
+}
+
+.text1 {
+  font-family: 'Quicksand', sans-serif;
+  transform: translate(335px, -220px);
+  font-size: 1rem;
+  text-align: left;
+  width: 100%;
+  margin: 0 auto;
+  color: #fff;
+  span {
+    display: block;
+  }
+  @media (max-width: 1440px) {
+    font-size: 2rem;
   }
 }
 
@@ -120,3 +157,4 @@ header {
   height: 32px;
   background: #f15946;
 }
+
