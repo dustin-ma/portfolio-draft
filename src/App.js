@@ -1,12 +1,14 @@
-import React, { Suspense, useRef, useEffect, useState } from "react";
+import React, { Suspense, useRef, useEffect, useState, Component } from "react";
 import "./App.scss";
 import lerp from "lerp"
 //Components
 import Header from "./components/header";
+import TextLoop from "react-text-loop";
 import { Section } from "./components/section";
 import { Canvas, useFrame, useThree } from "react-three-fiber";
 import { useTrail, useSpring, animated, a } from 'react-spring';
 import { Block, useBlock } from "./components/blocks";
+import Typical from 'react-typical'
 import { Html, useGLTFLoader } from "drei";
 
 // page states
@@ -16,6 +18,22 @@ import state from "./components/state";
 import { useInView } from "react-intersection-observer";
 
 // const { mouse } = useThree();
+
+var cursor = true;
+var speed = 250;
+
+setInterval(() => {
+   if(cursor && document.getElementById('cursor') != null) {
+     document.getElementById('cursor').style.opacity = 0;
+     cursor = false;
+   }else if(!cursor && document.getElementById('cursor') != null){
+     document.getElementById('cursor').style.opacity = 1;
+     cursor = true;
+   }
+}, speed);
+
+
+
 
 const Model = ({ modelPath }) => {
   const gltf = useGLTFLoader(modelPath, true);
@@ -76,7 +94,7 @@ const HTMLContent = ({
 function Trail({ open, children, ...props }) {
   const items = React.Children.toArray(children)
   const trail = useTrail(items.length, {
-    config: { mass: 5, tension: 2000, friction: 200 },
+    config: { mass: 8, tension: 2000, friction: 200 },
     opacity: open ? 1 : 0,
     x: open ? 0 : 20,
     height: open ? 110 : 0,
@@ -144,20 +162,24 @@ function Content({ left, children, scaleX, scaleY, posY, color }) {
   )
 }
 
+const calc = (x, y) => [x - window.innerWidth / 2, y - window.innerHeight / 2];
+const trans = (x, y) => `translate3d(${x / 20}px,${y / 20}px,0)`
+
 export default function App() {
   const [open, set] = useState(true);
+  const [props, setp] = useSpring(() => ({ xy: [0, 0], config: { mass: 10, tension: 550, friction: 140 } }));
   const domContent = useRef();
   const scrollArea = useRef();
   const onScroll = (e) => (state.top.current = e.target.scrollTop);
+  
   useEffect(() => void onScroll({ target: scrollArea.current }), []);
   return (
     <>
       <Header />
-      
       <Canvas colorManagement camera={{ position: [0, 0, 120], fov: 70 }}>
-        
         <Lights />
         <Suspense fallback={null}>
+
           <HTMLContent
             domContent={domContent}
             modelPath="/monitor.gltf"
@@ -166,13 +188,34 @@ export default function App() {
             positionZ={60}
             bgColor={"#f0c871"}
           >
-              <Trail open={open}>
-              <p className="title">DUSTIN MA</p>
-              <p className="text">ASPIRING FRONT END DEVELOPER<br></br>COMPUTER SCIENCE STUDENT</p>
+          <div class="container" onMouseMove={({ clientX: x, clientY: y }) => setp({ xy: calc(x, y) })}>
+          <animated.div style={{transform: props.xy.interpolate(trans)}}>
+              <Trail open={open} onClick={() => set((state) => !state)}>
+                  <span className="title">HI, I'M DUSTIN MA 👋</span>
+                  <TextLoop>
+                    <span>ASPIRING FRONT END DEVELOPER</span>
+                    <span>COMPUTER SCIENCE STUDENT</span>
+                    <span>DESIGN ENTHUSIAST</span>
+                 </TextLoop>{" "}
               </Trail>
+              </animated.div>  
+          </div>
+              {/* <h1 className="title">
+              <Typical
+                steps={['Hello, my name is Dustin Ma 👋', 1000]}
+                loop={Infinity} 
+              />
+               <p>
+                I'm 
+              <Typical
+                steps={[' a Computer Science Student.', 1000,' an aspiring front end developer.', 1000,' a design enthusiast.', 1000]}
+                loop={Infinity}
+                wrapper="b"
+              />
+               </p>
+              </h1> */}
+              
           
-           
-
           </HTMLContent>
           
           <HTMLContent
@@ -183,13 +226,15 @@ export default function App() {
             positionZ={108}
             bgColor={"#86bbc3"}
           >
-            <h1 className="title">Great Succuess!</h1>
+            <h1 className="title">Great Success!</h1>
           </HTMLContent>
 
           {/* First section */}
+    
           <Block factor={1.5} offset={0}>
             <Content left color={"#718C98"} posY={5} scaleX={30} scaleY={30}/>
           </Block>
+          
           {/* Second section */}
           <Block factor={2} offset={2}>
             <Content color={"#ead2ac"} posY={0} scaleX={30} scaleY={30}/>
