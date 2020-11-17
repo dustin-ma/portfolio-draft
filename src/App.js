@@ -7,9 +7,10 @@ import TextLoop from "react-text-loop";
 import { Section } from "./components/section";
 import { Canvas, useFrame, useThree } from "react-three-fiber";
 import { useTrail, useSpring, animated, a } from 'react-spring';
+import { useTransition } from "@react-spring/web";
 import { Block, useBlock } from "./components/blocks";
 import Typical from 'react-typical'
-import { Html, useGLTFLoader } from "drei";
+import { Html, useProgress, useGLTFLoader } from "drei";
 
 // page states
 import state from "./components/state";
@@ -37,7 +38,7 @@ setInterval(() => {
 
 const Model = ({ modelPath }) => {
   const gltf = useGLTFLoader(modelPath, true);
-  gltf.scene.scale.set(0.04,0.04,0.04);
+  gltf.scene.scale.set(0.03,0.03,0.03);
   return <primitive object={gltf.scene} dispose={null} />;
 };
 
@@ -125,17 +126,17 @@ function Plane({ color = "white", ...props }) {
   )
 }
 
-function Cross() {
+function Cross({scaleXYZ, posX, posY}) {
   const ref = useRef()
   const { viewportHeight } = useBlock()
   useFrame(() => {
     const curTop = state.top.current
     const curY = ref.current.rotation.z
-    const nextY = (curTop / ((state.pages - 1) * viewportHeight * 75)) * Math.PI
-    ref.current.rotation.z = lerp(curY, nextY, 1.5)
+    const nextY = (curTop / ((state.pages - 1) * viewportHeight * 20)) * Math.PI
+    ref.current.rotation.z = lerp(curY, nextY, 1.8)
   })
   return (
-    <group ref={ref} scale={[20, 20, 20]}>
+    <group ref={ref} position={[posX, posY, 0]} scale={[scaleXYZ, scaleXYZ, scaleXYZ]}>
       <Plane scale={[1, 0.2, 0.2]} color="#e6e0d6" />
       <Plane scale={[0.2, 1, 0.2]} color="#e6e0d6" />
     </group>
@@ -150,16 +151,36 @@ function Stripe({scaleX, posY, dir, color}) {
   )
 }
 
-function Content({ left, children, scaleX, scaleY, posY, color }) {
+function Content({ left, children, scaleX, scaleY, posY, posX, color }) {
   const { contentMaxWidth, canvasWidth, margin } = useBlock()
   const aspect = 1.75
-  const alignRight = (canvasWidth - contentMaxWidth - margin) / 2
+  /* const alignRight = (canvasWidth - contentMaxWidth - margin) / 2 */
+  /* [alignRight * (left ? -1 : 1) */
   return (
-    <group position={[alignRight * (left ? -1 : 1), posY, 0]}>
+    <group position={[posX, posY, 0]}>
       <Plane scale={[scaleX, scaleY, 1]} color={color} />
       {children}
     </group>
   )
+}
+
+function Loader() {
+  const { active, progress } = useProgress();
+  const transition = useTransition(active, {
+    from: { opacity: 1, progress: 0 },
+    leave: { opacity: 0 },
+    update: { progress },
+  });
+  return transition(
+    ({ progress, opacity }, active) =>
+      active && (
+        <a.div className='loading' style={{ opacity }}>
+          <div className='loading-bar-container'>
+            <a.div className='loading-bar' style={{ width: progress }}></a.div>
+          </div>
+        </a.div>
+      )
+  );
 }
 
 const calc = (x, y) => [x - window.innerWidth / 2, y - window.innerHeight / 2];
@@ -188,17 +209,18 @@ export default function App() {
             positionZ={60}
             bgColor={"#f0c871"}
           >
-          <div class="container" onMouseMove={({ clientX: x, clientY: y }) => setp({ xy: calc(x, y) })}>
+          <div class="container" onMouseMove={({ clientX: x, clientY: y }) => setp({ xy: calc(x, y) })} >
+
           <animated.div style={{transform: props.xy.interpolate(trans)}}>
-              <Trail open={open} onClick={() => set((state) => !state)}>
-                  <span className="title">HI, I'M DUSTIN MA 👋</span>
-                  <TextLoop>
-                    <span>ASPIRING FRONT END DEVELOPER</span>
-                    <span>COMPUTER SCIENCE STUDENT</span>
-                    <span>DESIGN ENTHUSIAST</span>
-                 </TextLoop>{" "}
-              </Trail>
-              </animated.div>  
+            <Trail open={open} onClick={() => set((state) => !state)}>
+                  <span>HI, I'M <weighted>DUSTIN MA</weighted> 👋</span>
+                    <TextLoop>
+                      <span>ASPIRING FRONT END DEVELOPER</span>
+                      <span>COMPUTER SCIENCE STUDENT</span>
+                      <span>DESIGN ENTHUSIAST</span>
+                    </TextLoop>{" "}
+             </Trail>
+            </animated.div>  
           </div>
               {/* <h1 className="title">
               <Typical
@@ -222,22 +244,29 @@ export default function App() {
             domContent={domContent}
             modelPath="/armchairGray.gltf"
             positionX={5}
-            positionY={-42}
-            positionZ={108}
-            bgColor={"#86bbc3"}
+            positionY={0}
+            positionZ={50}
+            bgColor={"#8FCB9B"}
           >
             <h1 className="title">Great Success!</h1>
           </HTMLContent>
 
           {/* First section */}
     
-          <Block factor={1.5} offset={0}>
-            <Content left color={"#718C98"} posY={5} scaleX={30} scaleY={30}/>
+          <Block factor={1.75} offset={0}>
+            <Content left color={"#8FCB9B"} posX={-35} posY={8} scaleX={10} scaleY={30}/>
           </Block>
+          <Block factor={-2.0} offset={0}>
+            <Content left color={"#5B9279"} posX={-45} posY={1} scaleX={10} scaleY={30}/>
+          </Block>
+          <Block factor={1.0} offset={0}>
+            <Content left color={"#414536"} posX={-55} posY={5} scaleX={10} scaleY={30}/>
+          </Block>
+          
           
           {/* Second section */}
           <Block factor={2} offset={2}>
-            <Content color={"#ead2ac"} posY={0} scaleX={30} scaleY={30}/>
+            <Content color={"#ead2ac"} posX={0} posY={0} scaleX={30} scaleY={30}/>
           </Block>
           {/* Stripe - Transition */}
           <Block factor={-1.0} offset={1}>
@@ -245,10 +274,24 @@ export default function App() {
           </Block>
           {/* Stripe - Salmon Main*/}
           <Block factor={-1.5} offset={1}>
-            <Stripe scaleX={750} posY={0} dir={1} color={"#fe938c"}/>
+            <Stripe scaleX={750} posY={0} dir={1} color={"#ffb584"}/>
           </Block>
+{/*           <Block factor={0.3} offset={0}>
+            <Cross scaleXYZ={5} posX={50} posY={-50}/>
+            <Cross scaleXYZ={5} posX={40} posY={-50}/>
+            <Cross scaleXYZ={5} posX={30} posY={-50}/>
+            <Cross scaleXYZ={5} posX={50} posY={-40}/>
+            <Cross scaleXYZ={5} posX={40} posY={-40}/>
+            <Cross scaleXYZ={5} posX={30} posY={-40}/>
+            <Cross scaleXYZ={5} posX={80} posY={-50}/>
+            <Cross scaleXYZ={5} posX={70} posY={-50}/>
+            <Cross scaleXYZ={5} posX={60} posY={-50}/>
+            <Cross scaleXYZ={5} posX={80} posY={-40}/>
+            <Cross scaleXYZ={5} posX={70} posY={-40}/>
+            <Cross scaleXYZ={5} posX={60} posY={-40}/>
+          </Block> */}
           {/* Last section */}
-          <Block factor={1.0} offset={2}>
+          <Block factor={1.0} offset={1}>
             <Content left>
               <Block factor={-1.0} color={"#bfe2ca"} scaleX={100} scaleY={100}>
                 <Cross />
@@ -263,9 +306,10 @@ export default function App() {
           </Block>
         </Suspense>
       </Canvas>
+      <Loader />
       <div className="scrollArea" ref={scrollArea} onScroll={onScroll}>
         <div style={{ position: "sticky", top: 0 }} ref={domContent}></div>
-        <div style={{ height: `${state.sections * 150}vh` }}></div>
+        <div style={{ height: `${state.sections * 100}vh` }}></div>
       </div>
     </>
   );
