@@ -21,7 +21,7 @@ import { useInView } from "react-intersection-observer";
 // const { mouse } = useThree();
 
 var cursor = true;
-var speed = 250;
+var speed = 300;
 
 setInterval(() => {
    if(cursor && document.getElementById('cursor') != null) {
@@ -215,9 +215,9 @@ export default function App() {
             <Trail open={open} onClick={() => set((state) => !state)}>
                   <span>HI, I'M <weighted>DUSTIN MA</weighted> 👋</span>
                     <TextLoop>
-                      <span>ASPIRING FRONT END DEVELOPER</span>
-                      <span>COMPUTER SCIENCE STUDENT</span>
-                      <span>DESIGN ENTHUSIAST</span>
+                      <span>ASPIRING FRONT END DEVELOPER<span id="cursor">  |</span></span>
+                      <span>COMPUTER SCIENCE STUDENT<span id="cursor">  |</span></span>
+                      <span>DESIGN ENTHUSIAST<span id="cursor">  |</span></span>
                     </TextLoop>{" "}
              </Trail>
             </animated.div>  
@@ -244,7 +244,7 @@ export default function App() {
             domContent={domContent}
             modelPath="/armchairGray.gltf"
             positionX={5}
-            positionY={0}
+            positionY={-50}
             positionZ={50}
             bgColor={"#8FCB9B"}
           >
