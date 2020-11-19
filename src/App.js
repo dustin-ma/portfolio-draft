@@ -8,6 +8,7 @@ import { Section } from "./components/section";
 import { Canvas, useFrame, useThree } from "react-three-fiber";
 import { useTrail, useSpring, animated, a } from 'react-spring';
 import { useTransition } from "@react-spring/web";
+import { motion } from "framer-motion"
 import { Block, useBlock } from "./components/blocks";
 import Typical from 'react-typical'
 import { Html, useProgress, useGLTFLoader } from "drei";
@@ -244,15 +245,25 @@ export default function App() {
             domContent={domContent}
             modelPath="/armchairGray.gltf"
             positionX={5}
-            positionY={-50}
+            positionY={20}
             positionZ={50}
             bgColor={"#8FCB9B"}
           >
-            <h1 className="title">Great Success!</h1>
+            {/* <motion.div initial={{ scale: 0 }}
+              animate={{ rotate: 180, scale: 3 }}
+              transition={{
+              repeat: Infinity,
+              type: "spring",
+              stiffness: 260,
+              damping: 20
+            }}> */}
+                <h1 className="title">Great Success!</h1>
+            
+
           </HTMLContent>
 
           {/* First section */}
-    
+          
           <Block factor={1.75} offset={0}>
             <Content left color={"#8FCB9B"} posX={-35} posY={8} scaleX={10} scaleY={30}/>
           </Block>
