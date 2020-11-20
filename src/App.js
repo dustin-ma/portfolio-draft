@@ -213,14 +213,14 @@ export default function App() {
           <div class="container" onMouseMove={({ clientX: x, clientY: y }) => setp({ xy: calc(x, y) })} >
 
           <animated.div style={{transform: props.xy.interpolate(trans)}}>
-            <Trail open={open} onClick={() => set((state) => !state)}>
+          <Trail open={open} onClick={() => set((state) => !state)}>
                   <span>HI, I'M <weighted>DUSTIN MA</weighted> 👋</span>
                     <TextLoop>
                       <span>ASPIRING FRONT END DEVELOPER<span id="cursor">  |</span></span>
                       <span>COMPUTER SCIENCE STUDENT<span id="cursor">  |</span></span>
                       <span>DESIGN ENTHUSIAST<span id="cursor">  |</span></span>
                     </TextLoop>{" "}
-             </Trail>
+                    </Trail>
             </animated.div>  
           </div>
               {/* <h1 className="title">
@@ -245,7 +245,7 @@ export default function App() {
             domContent={domContent}
             modelPath="/armchairGray.gltf"
             positionX={5}
-            positionY={20}
+            positionY={-50}
             positionZ={50}
             bgColor={"#8FCB9B"}
           >
