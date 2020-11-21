@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import { Block, useBlock } from "./components/blocks";
 import Typical from "react-typical";
 import { Html, useProgress, useGLTFLoader } from "drei";
+import Footer from "./components/footer";
 
 // page states
 import state from "./components/state";
@@ -56,7 +57,7 @@ const HTMLContent = ({
   bgColor,
   domContent,
   children,
-  modelPath,
+  /*  modelPath, */
   positionX,
   positionY,
   positionZ,
@@ -64,7 +65,7 @@ const HTMLContent = ({
   // wrapper for the html contents
 
   const ref = useRef();
-  useFrame(() => (ref.current.rotation.y += 0.005));
+  /* useFrame(() => (ref.current.rotation.y += 0.005)); */
   // useFrame(() => (console.log(mouse)));
   const [refItem, inView] = useInView({
     threshold: 0,
@@ -77,9 +78,9 @@ const HTMLContent = ({
   return (
     <Section factor={1.5} offset={1}>
       <group position={[positionX, positionY, positionZ]}>
-        <mesh ref={ref} position={[0, 0, 0]}>
+        {/* <mesh ref={ref} position={[0, 0, 0]}>
           <Model modelPath={modelPath} />
-        </mesh>
+        </mesh> */}
         <Html portal={domContent} fullscreen>
           <div className="container" ref={refItem}>
             {children}
@@ -120,6 +121,15 @@ function Trail({ open, children, ...props }) {
   );
 }
 
+function FakeSphere({ color = "red", ...props }) {
+  return (
+    <mesh {...props}>
+      <sphereBufferGeometry args={[5, 32, 32]} attach="geometry" />
+      <meshBasicMaterial color={color} attach="material" />
+    </mesh>
+  );
+}
+
 function Plane({ color = "white", ...props }) {
   return (
     <mesh {...props}>
@@ -151,14 +161,14 @@ function Cross({ scaleXYZ, posX, posY }) {
   );
 }
 
-function Stripe({ scaleX, posY, dir, color }) {
+function Stripe({ scaleX, scaleY, posX, posY, posZ, dir, color }) {
   var dirZ = (Math.PI / 4) * dir;
   const { contentMaxWidth } = useBlock();
   return (
     <Plane
-      scale={[scaleX, contentMaxWidth, 1]}
+      scale={[scaleX, contentMaxWidth * scaleY, 1]}
       rotation={[0, 0, dirZ]}
-      position={[0, posY, -1]}
+      position={[posX, posY, posZ]}
       color={color}
     />
   );
@@ -228,7 +238,7 @@ export default function App() {
             positionX={-100}
             positionY={250}
             positionZ={-50}
-            bgColor={"#f0c871"}
+            bgColor={"#F1D1B5"}
           >
             <div
               class="container"
@@ -282,21 +292,46 @@ export default function App() {
 
           <HTMLContent
             domContent={domContent}
-            modelPath="/armchairGray.gltf"
+            /* modelPath="/monitor.gltf" */
             positionX={3}
-            positionY={-200}
+            positionY={-800}
             positionZ={50}
-            bgColor={"#8FCB9B"}
+            bgColor={"#568EA6"}
           >
-            {/* <motion.div initial={{ scale: 0 }}
-              animate={{ rotate: 180, scale: 3 }}
-              transition={{
-              repeat: Infinity,
-              type: "spring",
-              stiffness: 260,
-              damping: 20
-            }}> */}
-            <h1 className="title">Great Success!</h1>
+            <div
+              class="container"
+              onMouseMove={({ clientX: x, clientY: y }) =>
+                setp({ xy: calc(x, y) })
+              }
+            >
+              <animated.div style={{ transform: props.xy.interpolate(trans) }}>
+                <Trail open={open} onClick={() => set((state) => !state)}>
+                  <p>Testing Box1</p>
+                </Trail>
+              </animated.div>
+            </div>
+          </HTMLContent>
+
+          <HTMLContent
+            domContent={domContent}
+            /* modelPath="/monitor.gltf" */
+            positionX={3}
+            positionY={-1300}
+            positionZ={50}
+            bgColor={"#305F72"}
+          >
+            <div
+              class="container"
+              onMouseMove={({ clientX: x, clientY: y }) =>
+                setp({ xy: calc(x, y) })
+              }
+            >
+              <animated.div style={{ transform: props.xy.interpolate(trans) }}>
+                <Trail open={open} onClick={() => set((state) => !state)}>
+                  <p>Testing Box</p>
+                </Trail>
+              </animated.div>
+            </div>
           </HTMLContent>
 
           {/* First section */}
@@ -305,33 +340,33 @@ export default function App() {
             <Content
               left
               color={"#8FCB9B"}
-              posX={-100}
-              posY={-20}
-              posZ={0}
-              scaleX={150}
-              scaleY={10}
+              posX={-180}
+              posY={-65}
+              posZ={20}
+              scaleX={30}
+              scaleY={150}
             />
           </Block>
           <Block factor={-2.0} offset={0}>
             <Content
               left
               color={"#5B9279"}
-              posX={-100}
-              posY={-30}
-              posZ={-60}
-              scaleX={150}
-              scaleY={15}
+              posX={-167}
+              posY={-90}
+              posZ={10}
+              scaleX={30}
+              scaleY={150}
             />
           </Block>
-          <Block factor={1.0} offset={0}>
+          <Block factor={1.4} offset={0}>
             <Content
               left
               color={"#414536"}
-              posX={-100}
-              posY={-45}
+              posX={-150}
+              posY={-105}
               posZ={-70}
-              scaleX={150}
-              scaleY={20}
+              scaleX={30}
+              scaleY={150}
             />
           </Block>
 
@@ -346,40 +381,93 @@ export default function App() {
             />
           </Block>
           {/* Stripe - Transition */}
-          <Block factor={-1.0} offset={1}>
-            <Stripe scaleX={750} posY={0} dir={1} color={"#e6b89c"} />
+          <Block factor={-3.8} offset={1}>
+            <Stripe
+              scaleX={300}
+              scaleY={3}
+              posX={0}
+              posY={-2650}
+              posZ={-400}
+              dir={1}
+              color={"#ff847c"}
+            />
           </Block>
           {/* Stripe - Salmon Main*/}
-          <Block factor={-1.5} offset={1}>
-            <Stripe scaleX={750} posY={0} dir={1} color={"#ffb584"} />
+          <Block factor={-2.5} offset={1}>
+            <Stripe
+              scaleX={400}
+              scaleY={3}
+              posX={0}
+              posY={-1800}
+              posZ={-500}
+              dir={1}
+              color={"#fecea8"}
+            />
           </Block>
-          {/*           <Block factor={0.3} offset={0}>
-            <Cross scaleXYZ={5} posX={50} posY={-50}/>
-            <Cross scaleXYZ={5} posX={40} posY={-50}/>
-            <Cross scaleXYZ={5} posX={30} posY={-50}/>
-            <Cross scaleXYZ={5} posX={50} posY={-40}/>
-            <Cross scaleXYZ={5} posX={40} posY={-40}/>
-            <Cross scaleXYZ={5} posX={30} posY={-40}/>
-            <Cross scaleXYZ={5} posX={80} posY={-50}/>
-            <Cross scaleXYZ={5} posX={70} posY={-50}/>
-            <Cross scaleXYZ={5} posX={60} posY={-50}/>
-            <Cross scaleXYZ={5} posX={80} posY={-40}/>
-            <Cross scaleXYZ={5} posX={70} posY={-40}/>
-            <Cross scaleXYZ={5} posX={60} posY={-40}/>
-          </Block> */}
-          {/* Last section */}
+          {/* The Sun */}
           <Block factor={1.0} offset={1}>
-            <Content left>
-              <Block factor={-1.0} color={"#bfe2ca"} scaleX={100} scaleY={100}>
-                <Cross />
-              </Block>
-            </Content>
+            <FakeSphere
+              scale={[15, 15, 1]}
+              position={[200, 200, -300]}
+              color={"#F95D20"}
+            />
           </Block>
-          <Block factor={1.2} offset={1}>
-            <Stripe scaleX={750} posY={-1200} dir={-1} color={"#718C98"} />
+          {/* The Ocean */}
+          <Block factor={0.8} offset={1}>
+            <Stripe
+              scaleX={500}
+              scaleY={3}
+              posX={-50}
+              posY={-300}
+              posZ={-250}
+              dir={2}
+              color={"#AED9E0"}
+            />
           </Block>
-          <Block factor={1.1} offset={1}>
-            <Stripe scaleX={750} posY={-1200} dir={-1} color={"#4281A4"} />
+          {/* Last section */}
+          <Block factor={1.3} offset={1}>
+            <Stripe
+              scaleX={400}
+              scaleY={1}
+              posX={100}
+              posY={-160}
+              posZ={-100}
+              dir={1}
+              color={"#705b46"}
+            />
+          </Block>
+          <Block factor={1.4} offset={1}>
+            <Stripe
+              scaleX={500}
+              scaleY={1}
+              posX={-50}
+              posY={-180}
+              posZ={-150}
+              dir={1}
+              color={"#5a4233"}
+            />
+          </Block>
+          <Block factor={1.4} offset={1}>
+            <Stripe
+              scaleX={500}
+              scaleY={1}
+              posX={-800}
+              posY={-180}
+              posZ={-150}
+              dir={1}
+              color={"#5a4233"}
+            />
+          </Block>
+          <Block factor={1.5} offset={1}>
+            <Stripe
+              scaleX={600}
+              scaleY={1}
+              posX={-300}
+              posY={-120}
+              posZ={-50}
+              dir={1}
+              color={"#43291f"}
+            />
           </Block>
         </Suspense>
       </Canvas>

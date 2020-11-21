@@ -47,7 +47,7 @@ weighted {
   position: relative;
   top: 0;
   left: 0;
-  line-height: 0;
+
   margin: 0 auto;
   width: 100vw;
   height: 100vh;
@@ -127,6 +127,13 @@ header {
   } */
 }
 
+.footer {
+  flex-shrink: 0;
+  text-align: center;
+  background-color: tomato;
+  color: white;
+}
+
 .blink {
   font-size: 1rem;
   text-align: right;
@@ -139,9 +146,9 @@ header {
 
 .trails-main {
   position: relative;
-  line-height: 1vmin;
+
   width: 0vw;
-  height: 35vh;
+  height: 1vh;
   overflow: visible;
   cursor: pointer;
   display: flex;
