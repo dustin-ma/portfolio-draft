@@ -4,12 +4,12 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Quicksand",
-    sans-serif;
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    "Quicksand", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #ead2ac; 
-  /* background: #ffb584; */ 
+  background: #ead2ac;
+  /* background: #ffb584; */
   transition: 0.4s ease-in-out;
   margin: 0;
   padding: 0;
@@ -47,6 +47,7 @@ weighted {
   position: relative;
   top: 0;
   left: 0;
+  line-height: 0;
   margin: 0 auto;
   width: 100vw;
   height: 100vh;
@@ -103,12 +104,11 @@ header {
   /* transform: translate(0px, -100px); */
   text-align: left;
   font-weight: 200;
-  margin: 0 auto;
   color: rgb(255, 255, 255);
- /*  span {
+  /*  span {
     display: block;
   } */
- /*  @media (max-width: 1440px) {
+  /*  @media (max-width: 1440px) {
     font-size: 2rem;
   } */
 }
@@ -139,25 +139,26 @@ header {
 
 .trails-main {
   position: relative;
+  line-height: 1vmin;
   width: 0vw;
   height: 35vh;
-  transform: translate(100px, 0px);
   overflow: visible;
   cursor: pointer;
   display: flex;
   white-space: nowrap;
-/*   justify-content: left;
+  /*   justify-content: left;
   align-items: left; */
 }
 
 .trails-text {
-  position: relative; 
-  line-height: 1vh;
+  position: relative;
+
   color: rgb(255, 255, 255);
-  font-size: 6vmin;
+  font-size: 5vmin;
   font-weight: 200;
+  line-height: 0px;
   letter-spacing: -0.3vw;
-  
+
   will-change: transform, opacity;
 }
 
@@ -188,4 +189,3 @@ header {
   height: 32px;
   background: #f15946;
 }
-
