@@ -306,7 +306,8 @@ export default function App() {
             >
               <animated.div style={{ transform: props.xy.interpolate(trans) }}>
                 <Trail open={open} onClick={() => set((state) => !state)}>
-                  <p>Testing Box1</p>
+                  <p>I'm still learning!</p>
+                  <p>Reach me at dustin.jpg@gmail.com 😊</p>
                 </Trail>
               </animated.div>
             </div>
@@ -327,9 +328,10 @@ export default function App() {
               }
             >
               <animated.div style={{ transform: props.xy.interpolate(trans) }}>
-                <Trail open={open} onClick={() => set((state) => !state)}>
-                  <p>Testing Box</p>
-                </Trail>
+                <Trail
+                  open={open}
+                  onClick={() => set((state) => !state)}
+                ></Trail>
               </animated.div>
             </div>
           </HTMLContent>
